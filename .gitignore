@@ -1,0 +1,14 @@
+# Node modules directory
+node_modules/
+
+# Optional: if you use npm logs or temporary files
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Optional: if you have build output directories (like dist or build)
+dist/
+build/
+
+# .env files if you store environment variables
+.env

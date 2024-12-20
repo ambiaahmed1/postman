@@ -1,0 +1,45 @@
+name: Run Newman Tests
+
+on:
+  push:
+    branches:
+      - main      # Trigger this workflow on push to the main branch
+  pull_request:
+    branches:
+      - main      # Trigger this workflow on pull requests targeting the main branch
+
+jobs:
+  newman-test:
+    runs-on: ubuntu-latest    # You can also use macos-latest or windows-latest if needed
+
+    steps:
+      # Step 1: Check out the code from the repository
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Step 2: Set up Node.js environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'   # Specify the Node.js version you want to use
+
+      # Step 3: Install dependencies (including Newman)
+      - name: Install dependencies
+        run: |
+          npm install -g newman       # Install Newman globally
+          npm install                 # Install project dependencies
+
+      # Step 4: Run Newman with your Postman collection
+      - name: Run Newman tests
+        run: |
+          newman run ./path_to_your_collection.json \
+            --reporters cli,html,json \
+            --reporter-html-export ./newman-report.html
+
+      # Step 5: Upload the HTML report as an artifact (optional)
+      - name: Upload HTML Report as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: newman-html-report
+          path: ./newman
+
