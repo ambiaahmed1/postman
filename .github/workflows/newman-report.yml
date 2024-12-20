@@ -26,8 +26,8 @@ jobs:
       # Step 3: Install dependencies (including Newman)
       - name: Install dependencies
         run: |
-          npm install -g newman       # Install Newman globally
           npm install                 # Install project dependencies
+          npm install -g newman       # Install Newman globally
 
       # Step 4: Run Newman with your Postman collection
       - name: Run Newman tests
