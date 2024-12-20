@@ -3,14 +3,14 @@ name: Run Newman Tests
 on:
   push:
     branches:
-      - main      # Trigger this workflow on push to the main branch
+      - main
   pull_request:
     branches:
-      - main      # Trigger this workflow on pull requests targeting the main branch
+      - main
 
 jobs:
   newman-test:
-    runs-on: ubuntu-latest    # You can also use macos-latest or windows-latest if needed
+    runs-on: ubuntu-latest
 
     steps:
       # Step 1: Check out the code from the repository
@@ -21,33 +21,42 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '22'   # Update Node.js version to 22
+          node-version: '22'
 
       # Step 3: Install Newman globally
       - name: Install Newman globally
         run: npm install -g newman
-        working-directory: ./src  # Set the working directory to `src` where `package.json` is
+        working-directory: ./src
 
       # Step 4: Install local dependencies from package.json
       - name: Install local dependencies
         run: npm install
-        working-directory: ./src  # Again, ensure `npm install` runs in the `src` directory
+        working-directory: ./src
 
-
+      # Step 5: Run Newman with your Postman collection
       - name: Run Newman tests
         run: |
-          newman run Test.postman_collection.json --reporters cli,html,json --reporter-html-export ./newman/newman-report.html
-        working-directory: ./src   # Ensure this is the correct directory for the collection
+          newman run ./src/Test.postman_collection.json \
+            --reporters cli,html,json \
+            --reporter-html-export ./newman/newman-report.html \
+            --reporter-json-export ./newman/newman-report.json
+        working-directory: ./src
 
-      # Step 6: Upload the HTML report as an artifact (optional)
+      # Step 6: List files after running Newman
+      - name: List files after running Newman
+        run: |
+          echo "Current working directory:"
+          pwd
+          echo "Listing files in the working directory:"
+          ls -R ./
+          echo "Listing files in the newman directory:"
+          ls -R ./newman
+
+      # Step 7: Upload the HTML report as an artifact (if file exists)
       - name: Upload HTML Report as Artifact
         uses: actions/upload-artifact@v3
         with:
           name: newman-html-report
           path: ./newman/newman-report.html
-
-      - name: List files in the newman directory for debugging
-        run: |
-          ls -R ./newman
-
-
+          if-no-files-found: warn
+          include-hidden-files: false
