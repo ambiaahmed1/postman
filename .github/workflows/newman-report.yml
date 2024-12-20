@@ -46,3 +46,8 @@ jobs:
           name: newman-html-report
           path: ./newman/newman-report.html
 
+      - name: List files in the newman directory for debugging
+        run: |
+          ls -R ./newman
+
+
