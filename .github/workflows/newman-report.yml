@@ -36,7 +36,7 @@ jobs:
 
       - name: Run Newman tests
         run: |
-          newman run ./src/Test.postman_collection.json \
+          newman run Test.postman_collection.json \
             --reporters cli,html,json \
             --reporter-html-export ./newman/newman-report.html \
             --reporter-json-export ./newman/newman-report.json
