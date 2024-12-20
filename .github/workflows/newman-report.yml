@@ -43,7 +43,7 @@ jobs:
             --reporters cli,html,json \
             --reporter-html-export ./newman/newman-report.html \
             --reporter-json-export ./newman/newman-report.json
-        working-directory: ./src   # Ensure this is the correct directory for the collection
+        working-directory: ./src/postman_collections   # Ensure this is the correct directory for the collection
 
       # Step 6: Upload the HTML report as an artifact (optional)
       - name: Upload HTML Report as Artifact
