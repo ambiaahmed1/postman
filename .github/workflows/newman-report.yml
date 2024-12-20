@@ -36,9 +36,7 @@ jobs:
 
       - name: Run Newman tests
         run: |
-          newman run Test.postman_collection.json \
-            --reporters cli,html,json \
-            --reporter-html-export ./newman/newman-report.html
+          newman run Test.postman_collection.json --reporters cli,html,json --reporter-html-export ./newman/newman-report.html
         working-directory: ./src   # Ensure this is the correct directory for the collection
 
       # Step 6: Upload the HTML report as an artifact (optional)
