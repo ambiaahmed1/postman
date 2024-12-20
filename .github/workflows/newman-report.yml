@@ -33,10 +33,9 @@ jobs:
         run: npm install
         working-directory: ./src  # Again, ensure `npm install` runs in the `src` directory
 
-      # Step 5: Run Newman with your Postman collection
       - name: Run Newman tests
         run: |
-          newman run ./src/Test.postman_collection.json \
+          newman run ./src/postman_collections/Test.postman_collection.json \
             --reporters cli,html,json \
             --reporter-html-export ./newman/newman-report.html \
             --reporter-json-export ./newman/newman-report.json
