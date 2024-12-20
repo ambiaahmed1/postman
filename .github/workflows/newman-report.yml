@@ -30,6 +30,10 @@ jobs:
         working-directory: ./src
           npm install -g newman       # Install Newman globally
 
+      - name: Install global dependencies (Newman)
+        run: npm install -g newman
+        working-directory: ./src  # Ensure this points to the 'src' directory where your package.json is located
+
       # Step 4: Run Newman with your Postman collection
       - name: Run Newman tests
         run: |
