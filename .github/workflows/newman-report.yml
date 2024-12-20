@@ -17,34 +17,41 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Step 2: Set up Node.js environment
+      # Step 2: Set up Node.js version 22
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '22'   # Specify the Node.js version you want to use
+          node-version: '22'   # Update Node.js version to 22
 
-      # Step 3: Install dependencies (including Newman)
-      - name: Install dependencies
-        run: |
-          npm install                 # Install project dependencies
-        working-directory: ./src
-          npm install -g newman       # Install Newman globally
-
-      - name: Install global dependencies (Newman)
+      # Step 3: Install Newman globally
+      - name: Install Newman globally
         run: npm install -g newman
-        working-directory: ./src  # Ensure this points to the 'src' directory where your package.json is located
+        working-directory: ./src  # Set the working directory to `src` where `package.json` is
 
-      # Step 4: Run Newman with your Postman collection
+      # Step 4: Install local dependencies from package.json
+      - name: Install local dependencies
+        run: npm install
+        working-directory: ./src  # Again, ensure `npm install` runs in the `src` directory
+
+      # Step 5: Run Newman with your Postman collection
       - name: Run Newman tests
         run: |
-          newman run ./path_to_your_collection.json \
+          newman run ./src/your_collection.json \
             --reporters cli,html,json \
-            --reporter-html-export ./newman-report.html
+            --reporter-html-export ./newman/newman-report.html \
+            --reporter-json-export ./newman/newman-report.json
+        working-directory: ./src   # Ensure this is the correct directory for the collection
 
-      # Step 5: Upload the HTML report as an artifact (optional)
+      # Step 6: Upload the HTML report as an artifact (optional)
       - name: Upload HTML Report as Artifact
         uses: actions/upload-artifact@v3
         with:
           name: newman-html-report
-          path: ./newman
+          path: ./newman/newman-report.html
 
+      # Step 7: Upload the JSON report as an artifact (optional)
+      - name: Upload JSON Report as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: newman-json-report
+          path: ./newman/newman-report.json
